@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ name }}さんのシフト</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fafafa;
+      padding: 10px;
+      margin: 0;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin: 15px auto;
+      max-width: 500px;
+    }
+    .day {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .work {
+      background-color: #dfffd8;
+      border-color: #8bc34a;
+    }
+    .store {
+      font-weight: bold;
+      color: #333;
+      margin-top: 5px;
+      font-size: 12px;
+    }
+    .time {
+      color: #555;
+      font-size: 12px;
+    }
+    .back-btn {
+      display: block;
+      width: 90%;
+      max-width: 300px;
+      margin: 15px auto;
+      padding: 10px;
+      text-align: center;
+      background-color: #2196f3;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h2>
+    {% if mode == "name" %}
+      {{ name }}さんのシフト
+    {% elif mode == "store" %}
+      {{ store }}のシフト勤務者一覧
+    {% elif mode == "both" %}
+      {{ name }}さんの{{ store }}でのシフト
+    {% endif %}
+  </h2>
+
+  {% if mode == "name" or mode == "both" %}
+    <div class="calendar">
+      {% for day in calendar %}
+        <div class="day {% if day.work %}work{% endif %}">
+          <div>{{ day.date }}</div>
+          {% if day.work %}
+            <div class="store">{{ day.store }}</div>
+            <div class="time">{{ day.time }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% elif mode == "store" %}
+    <div style="max-width:500px;margin:0 auto;text-align:left;">
+      {% for item in store_calendar %}
+        <div class="day work" style="margin-bottom:10px;">
+          <div><strong>{{ item.date }}</strong></div>
+          <div>勤務者: {{ item.names | join(", ") }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <a href="/" class="back-btn">戻る</a>
+</body>
+</html>

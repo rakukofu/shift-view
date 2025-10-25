@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>シフト検索</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fafafa;
+      text-align: center;
+      margin-top: 50px;
+    }
+    input, button {
+      padding: 8px;
+      margin: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>📅 シフト検索アプリ</h2>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul style="color: red; font-weight: bold;">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ファイルアップロードフォーム -->
+  <form method="POST" action="/upload" enctype="multipart/form-data">
+    <label for="file">シフトファイルをアップロード</label>
+    <input type="file" id="file" name="file" accept=".xlsx" required autocomplete="off">
+    <button type="submit">アップロード</button>
+  </form>
+
+  <h3>アップロード済みファイル一覧</h3>
+  <ul>
+    {% for fname in files %}
+      <li>
+        {{ fname }}
+        <form method="POST" action="/delete" style="display:inline">
+          <input type="hidden" name="filename" value="{{ fname }}">
+          <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+        </form>
+      </li>
+    {% endfor %}
+    {% if files|length == 0 %}
+      <li>ファイルはありません</li>
+    {% endif %}
+  </ul>
+
+  <!-- 検索フォーム（ファイル選択なし） -->
+  <form method="POST" action="/search">
+    <label for="name">名前</label>
+    <input type="text" id="name" name="name" placeholder="名前を入力" autocomplete="name"><br>
+    <label for="month_name">月指定（名前検索用）</label>
+    <select id="month_name" name="month_name">
+      <option value="">すべて</option>
+      {% for m in range(1, 13) %}
+        <option value="{{ m }}">{{ m }}月</option>
+      {% endfor %}
+    </select><br>
+    <label for="store">勤務地</label>
+    <input type="text" id="store" name="store" placeholder="店舗名を入力" autocomplete="organization"><br>
+    <label for="month_store">月指定（勤務地検索用）</label>
+    <select id="month_store" name="month_store">
+      <option value="">すべて</option>
+      {% for m in range(1, 13) %}
+        <option value="{{ m }}">{{ m }}月</option>
+      {% endfor %}
+    </select><br>
+    <button type="submit">検索する</button>
+  </form>
+</body>
+</html>
