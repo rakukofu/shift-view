@@ -36,7 +36,7 @@
     {% endif %}
   {% endwith %}
 
-  <button type="button" onclick="toggleFileMenu()" style="margin-bottom:20px;">ファイルメニューを開く</button>
+  <button id="open-file-menu-btn" type="button" onclick="toggleFileMenu()" style="margin-bottom:20px;">ファイルメニューを開く</button>
   <div id="file-menu" style="display:none; border:1px solid #ccc; padding:16px; margin-bottom:24px; background:#f8f8f8; max-width:500px; margin-left:auto; margin-right:auto;">
     <!-- ファイルアップロードフォーム -->
     <form method="POST" action="/upload" enctype="multipart/form-data">
@@ -60,12 +60,20 @@
         <li>ファイルはありません</li>
       {% endif %}
     </ul>
-    <button type="button" onclick="toggleFileMenu()" style="margin-top:10px;background:#f44336;color:white;padding:8px 16px;border:none;border-radius:6px;">ファイルメニューを閉じる</button>
+    <button id="close-file-menu-btn" type="button" onclick="toggleFileMenu()" style="margin-top:10px;background:#f44336;color:white;padding:8px 16px;border:none;border-radius:6px;">ファイルメニューを閉じる</button>
   </div>
   <script>
     function toggleFileMenu() {
       var menu = document.getElementById('file-menu');
-      menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
+      var openBtn = document.getElementById('open-file-menu-btn');
+      var closeBtn = document.getElementById('close-file-menu-btn');
+      if (menu.style.display === 'none' || menu.style.display === '') {
+        menu.style.display = 'block';
+        openBtn.style.display = 'none';
+      } else {
+        menu.style.display = 'none';
+        openBtn.style.display = 'inline-block';
+      }
     }
   </script>
 
