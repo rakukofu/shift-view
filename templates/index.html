@@ -36,29 +36,38 @@
     {% endif %}
   {% endwith %}
 
-  <!-- ファイルアップロードフォーム -->
-  <form method="POST" action="/upload" enctype="multipart/form-data">
-    <label for="file">シフトファイルをアップロード</label>
-    <input type="file" id="file" name="file" accept=".xlsx" required autocomplete="off">
-    <button type="submit">アップロード</button>
-  </form>
-
-  <h3>アップロード済みファイル一覧</h3>
-  <ul>
-    {% for fname in files %}
-      <li>
-        {{ fname }}
-        <a href="/download/{{ fname }}" target="_blank">ダウンロード</a>
-        <form method="POST" action="/delete" style="display:inline">
-          <input type="hidden" name="filename" value="{{ fname }}">
-          <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
-        </form>
-      </li>
-    {% endfor %}
-    {% if files|length == 0 %}
-      <li>ファイルはありません</li>
-    {% endif %}
-  </ul>
+  <button type="button" onclick="toggleFileMenu()" style="margin-bottom:20px;">ファイルメニューを開く</button>
+  <div id="file-menu" style="display:none; border:1px solid #ccc; padding:16px; margin-bottom:24px; background:#f8f8f8; max-width:500px; margin-left:auto; margin-right:auto;">
+    <!-- ファイルアップロードフォーム -->
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+      <label for="file">シフトファイルをアップロード</label>
+      <input type="file" id="file" name="file" accept=".xlsx" required autocomplete="off">
+      <button type="submit">アップロード</button>
+    </form>
+    <h3>アップロード済みファイル一覧</h3>
+    <ul>
+      {% for fname in files %}
+        <li>
+          {{ fname }}
+          <a href="/download/{{ fname }}" target="_blank">ダウンロード</a>
+          <form method="POST" action="/delete" style="display:inline">
+            <input type="hidden" name="filename" value="{{ fname }}">
+            <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+          </form>
+        </li>
+      {% endfor %}
+      {% if files|length == 0 %}
+        <li>ファイルはありません</li>
+      {% endif %}
+    </ul>
+    <button type="button" onclick="toggleFileMenu()">閉じる</button>
+  </div>
+  <script>
+    function toggleFileMenu() {
+      var menu = document.getElementById('file-menu');
+      menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'block' : 'none';
+    }
+  </script>
 
   <!-- 検索フォーム（ファイル選択なし） -->
   <form method="POST" action="/search">
