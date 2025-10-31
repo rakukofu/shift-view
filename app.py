@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 import pandas as pd
 import os
 import glob
@@ -39,6 +39,10 @@ def delete():
     else:
         flash(f"{filename} が見つかりませんでした。")
     return redirect(url_for("index"))
+
+@app.route("/download/<filename>")
+def download(filename):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], filename, as_attachment=True)
 
 @app.route("/search", methods=["POST"])
 def search():

@@ -48,6 +48,7 @@
     {% for fname in files %}
       <li>
         {{ fname }}
+        <a href="/download/{{ fname }}" target="_blank">ダウンロード</a>
         <form method="POST" action="/delete" style="display:inline">
           <input type="hidden" name="filename" value="{{ fname }}">
           <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
